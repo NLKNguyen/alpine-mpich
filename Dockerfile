@@ -1,8 +1,12 @@
 FROM alpine:3.4
+# In case the main package repositories are down, use the alternative:
+# FROM gliderlabs/alpine:3.4
 
-MAINTAINER Nguyen Nguyen <NLKNguyen@MSN.com>
+MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 
-RUN apk add --no-cache build-base
+RUN apk update && apk upgrade \
+      && apk add --no-cache build-base
+
 
 #### INSTALL MPICH ####
 # Available at http://www.mpich.org/static/downloads/
@@ -19,11 +23,11 @@ ENV MPICH_MAKE_OPTIONS VERBOSE=1
 RUN mkdir /tmp/mpich-src
 WORKDIR /tmp/mpich-src
 RUN wget http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VERSION}.tar.gz \
-    && tar xfz mpich-${MPICH_VERSION}.tar.gz  \
-    && cd mpich-${MPICH_VERSION}  \
-    && ./configure ${MPICH_CONFIGURE_OPTIONS}  \
-    && make ${MPICH_MAKE_OPTIONS} && make install \
-    && cd /tmp/ && rm -rf /tmp/mpich-src
+      && tar xfz mpich-${MPICH_VERSION}.tar.gz  \
+      && cd mpich-${MPICH_VERSION}  \
+      && ./configure ${MPICH_CONFIGURE_OPTIONS}  \
+      && make ${MPICH_MAKE_OPTIONS} && make install \
+      && rm -rf /tmp/mpich-src
 
 
 #### TEST MPICH INSTALLATION ####
@@ -34,17 +38,24 @@ RUN sh test.sh
 RUN rm -rf /tmp/mpich-test
 
 
-#### FINAL CLEAN UP ####
+#### CLEAN UP ####
 WORKDIR /
 RUN rm -rf /tmp/*
 
 
 #### ADD NORMAL USER ####
-ENV USERNAME user
+ENV USERNAME alpine
 RUN adduser -D ${USERNAME} \
-    && echo "${USERNAME}   ALL=(ALL) ALL" >> /etc/sudoers 
+      && echo "${USERNAME}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
+
+
+#### CREATE WORKING DIRECTORY FOR USER ####
+ENV WORKING_DIRECTORY /project
+RUN mkdir ${WORKING_DIRECTORY}
+RUN chown -R ${USERNAME} ${WORKING_DIRECTORY}
+
+WORKDIR ${WORKING_DIRECTORY}
 USER ${USERNAME}
 
 
-WORKDIR /home/${USERNAME}
-CMD ["ash"] 
+CMD ["/bin/ash"] 
