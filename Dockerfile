@@ -5,7 +5,7 @@ FROM alpine:3.4
 MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 
 RUN apk update && apk upgrade \
-      && apk add --no-cache build-base
+      && apk add --no-cache build-base sudo
 
 
 #### INSTALL MPICH ####
