@@ -26,7 +26,7 @@ After downloading the image to the cache in your system for the first time, it w
 
 Argument explanation:
 * `--rm` remove the container after the program is finished.
-* `-it` open an interactive terminal session (see -i, -t for details)
+* `-it` open an interactive terminal session (see [-i -t](https://docs.docker.com/engine/reference/run/) for details)
 * `-v ${PWD}:/project` volume mount the current directory `${PWD}` where your shell is at, to the directory `/project` inside the container based on this `nlknguyen/alpine-mpich` image. Alternatively, `-v ${PWD}:${PWD}` also has the same effect since `/project` is the default working directory of the container, but if you extend the image or customize the build, that might not hold true.
 
 *Follow general guidelines for using Docker container*
@@ -53,7 +53,7 @@ These are available Docker **build arguments** to customize the build:
 - `REQUIRED_PACKAGES` *space-separated names of packages to be installed from Alpine main [package repository](http://pkgs.alpinelinux.org/packages) before downloading and installing MPICH. Default=`"sudo build-base openssh nfs-utils"`*
 - `MPICH_VERSION` *to find which version of MPICH to download from [here](http://www.mpich.org/static/downloads/). Default=`"3.2"`*
 - `MPICH_CONFIGURE_OPTIONS` *to be passed to `./configure` in MPICH source directory. Default=`"--disable-fortran"`*
-- `MPICH_MAKE_OPTIONS` *to be passed to `make` after the above command. Default=`"--disable-fortran"`. Default is empty*
+- `MPICH_MAKE_OPTIONS` *to be passed to `make` after the above command. Default is empty*
 
 *See MPICH documentation for available options*
 
