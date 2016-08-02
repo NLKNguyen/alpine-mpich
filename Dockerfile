@@ -4,20 +4,21 @@ FROM alpine:3.4
 
 MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 
+ARG REQUIRED_PACKAGES="sudo build-base openssh nfs-utils"
 RUN apk update && apk upgrade \
-      && apk add --no-cache build-base sudo
+      && apk add --no-cache ${REQUIRED_PACKAGES}
 
 
 #### INSTALL MPICH ####
-# Available at http://www.mpich.org/static/downloads/
+# Source is available at http://www.mpich.org/static/downloads/
 
 # Build Options:
 # See installation guide of target MPICH version
 # Ex: http://www.mpich.org/static/downloads/3.2/mpich-3.2-installguide.pdf
 # These options are passed to the steps below
-ENV MPICH_VERSION 3.2
-ENV MPICH_CONFIGURE_OPTIONS --disable-fortran
-ENV MPICH_MAKE_OPTIONS VERBOSE=1
+ARG MPICH_VERSION="3.2"
+ARG MPICH_CONFIGURE_OPTIONS="--disable-fortran" 
+ARG MPICH_MAKE_OPTIONS
 
 # Download, build, and install MPICH
 RUN mkdir /tmp/mpich-src
@@ -44,18 +45,20 @@ RUN rm -rf /tmp/*
 
 
 #### ADD NORMAL USER ####
-ENV USERNAME alpine
-RUN adduser -D ${USERNAME} \
-      && echo "${USERNAME}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
+ARG DEFAULT_USER=alpine
+ENV DEFAULT_USER ${DEFAULT_USER}
+RUN adduser -D ${DEFAULT_USER} \
+      && echo "${DEFAULT_USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
 
 
 #### CREATE WORKING DIRECTORY FOR USER ####
-ENV WORKING_DIRECTORY /project
+ARG WORKING_DIRECTORY=/project
+ENV WORKING_DIRECTORY ${WORKING_DIRECTORY}
 RUN mkdir ${WORKING_DIRECTORY}
-RUN chown -R ${USERNAME} ${WORKING_DIRECTORY}
+RUN chown -R ${DEFAULT_USER} ${WORKING_DIRECTORY}
 
 WORKDIR ${WORKING_DIRECTORY}
-USER ${USERNAME}
+USER ${DEFAULT_USER}
 
 
 CMD ["/bin/ash"] 
