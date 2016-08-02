@@ -29,8 +29,7 @@ Argument explanation:
 * `-it` open an interactive terminal session (see -i, -t for details)
 * `-v ${PWD}:/project` volume mount the current directory `${PWD}` where your shell is at, to the directory `/project` inside the container based on this `nlknguyen/alpine-mpich` image. Alternatively, `-v ${PWD}:${PWD}` also has the same effect since `/project` is the default working directory of the container, but if you extend the image or customize the build, that might not hold true.
 
-
-Follow general guidelines of using container. Don't use this image like a VM even though nothing stops
+*Follow general guidelines for using Docker container*
 
 ## Extending the Image
 It is common that you need to install/remove packages, add compiled program, configure network, or any administration task. You can do those with this image just like you can do with any other Docker images. Below is a simple example. See Docker documentation for details.
