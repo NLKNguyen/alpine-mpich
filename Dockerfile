@@ -17,7 +17,7 @@ RUN apk update && apk upgrade \
 # Ex: http://www.mpich.org/static/downloads/3.2/mpich-3.2-installguide.pdf
 # These options are passed to the steps below
 ARG MPICH_VERSION="3.2"
-ARG MPICH_CONFIGURE_OPTIONS="--disable-fortran" 
+ARG MPICH_CONFIGURE_OPTIONS="--disable-fortran"
 ARG MPICH_MAKE_OPTIONS
 
 # Download, build, and install MPICH
@@ -44,11 +44,11 @@ WORKDIR /
 RUN rm -rf /tmp/*
 
 
-#### ADD NORMAL USER ####
+#### ADD DEFAULT USER ####
 ARG DEFAULT_USER=alpine
 ENV DEFAULT_USER ${DEFAULT_USER}
 RUN adduser -D ${DEFAULT_USER} \
-      && echo "${DEFAULT_USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers 
+      && echo "${DEFAULT_USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 
 #### CREATE WORKING DIRECTORY FOR USER ####
@@ -61,4 +61,4 @@ WORKDIR ${WORKING_DIRECTORY}
 USER ${DEFAULT_USER}
 
 
-CMD ["/bin/ash"] 
+CMD ["/bin/ash"]
