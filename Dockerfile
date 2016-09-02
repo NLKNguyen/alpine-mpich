@@ -1,12 +1,12 @@
 FROM alpine:3.4
-# In case the main package repositories are down, use the alternative:
+# In case the main package repositories are down, use the alternative base image:
 # FROM gliderlabs/alpine:3.4
 
 MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 
-ARG REQUIRED_PACKAGES="sudo build-base openssh nfs-utils"
+ARG REQUIRE="sudo build-base openssh"
 RUN apk update && apk upgrade \
-      && apk add --no-cache ${REQUIRED_PACKAGES}
+      && apk add --no-cache ${REQUIRE}
 
 
 #### INSTALL MPICH ####
@@ -45,20 +45,20 @@ RUN rm -rf /tmp/*
 
 
 #### ADD DEFAULT USER ####
-ARG DEFAULT_USER=alpine
-ENV DEFAULT_USER ${DEFAULT_USER}
-RUN adduser -D ${DEFAULT_USER} \
-      && echo "${DEFAULT_USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+ARG USER=mpi
+ENV USER ${USER}
+RUN adduser -D ${USER} \
+      && echo "${USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 
 #### CREATE WORKING DIRECTORY FOR USER ####
-ARG WORKING_DIRECTORY=/project
-ENV WORKING_DIRECTORY ${WORKING_DIRECTORY}
-RUN mkdir ${WORKING_DIRECTORY}
-RUN chown -R ${DEFAULT_USER} ${WORKING_DIRECTORY}
+ARG WORKDIR=/project
+ENV WORKDIR ${WORKDIR}
+RUN mkdir ${WORKDIR}
+RUN chown -R ${USER} ${WORKDIR}
 
-WORKDIR ${WORKING_DIRECTORY}
-USER ${DEFAULT_USER}
+WORKDIR ${WORKDIR}
+USER ${USER}
 
 
 CMD ["/bin/ash"]
