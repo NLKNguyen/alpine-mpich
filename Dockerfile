@@ -50,12 +50,14 @@ ENV USER ${USER}
 RUN adduser -D ${USER} \
       && echo "${USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+ENV HOME /home/${USER}
+RUN chown -R ${USER}:${USER} ${HOME}
 
 #### CREATE WORKING DIRECTORY FOR USER ####
 ARG WORKDIR=/project
 ENV WORKDIR ${WORKDIR}
 RUN mkdir ${WORKDIR}
-RUN chown -R ${USER} ${WORKDIR}
+RUN chown -R ${USER}:${USER} ${WORKDIR}
 
 WORKDIR ${WORKDIR}
 USER ${USER}
