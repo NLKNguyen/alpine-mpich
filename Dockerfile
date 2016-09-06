@@ -4,7 +4,7 @@ FROM alpine:3.4
 
 MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 
-ARG REQUIRE="sudo build-base openssh"
+ARG REQUIRE="sudo build-base"
 RUN apk update && apk upgrade \
       && apk add --no-cache ${REQUIRE}
 
@@ -50,8 +50,8 @@ ENV USER ${USER}
 RUN adduser -D ${USER} \
       && echo "${USER}   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-ENV HOME /home/${USER}
-RUN chown -R ${USER}:${USER} ${HOME}
+ENV USER_HOME /home/${USER}
+RUN chown -R ${USER}:${USER} ${USER_HOME}
 
 #### CREATE WORKING DIRECTORY FOR USER ####
 ARG WORKDIR=/project
