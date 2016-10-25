@@ -61,13 +61,6 @@ RUN mkdir -p ${SSHDIR}
 RUN echo "StrictHostKeyChecking no" > ${SSHDIR}/config
 # This file can be overwritten by the following onbuild step if ssh/ directory has config file
 
-
-RUN  mkdir /tmp/fuseflt-source/ \
-  && cd /tmp/fuseflt-source/ \
-  && git clone https://github.com/thkala/fuseflt . \
-  && make install
-
-
 # Switch back to default user
 USER ${USER}
 
