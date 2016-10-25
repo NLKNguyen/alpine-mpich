@@ -1,0 +1,4 @@
+#!/bin/sh
+
+( netstat -t | grep ESTABLISHED | awk '{print $5}' | grep 'worker' | cut -d: -f1  \
+& grep -E "$(hostname)" /etc/hosts | cut -f1  ) | sort -u

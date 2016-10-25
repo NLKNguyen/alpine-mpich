@@ -1,0 +1,11 @@
+#!/bin/sh
+
+hosts=$(get_hosts)
+printf "$hosts" > $1
+
+while sleep 2
+do
+  current_hosts=$(get_hosts)
+  [ "$hosts" != "$current_hosts" ] && printf "$current_hosts" > $1
+  hosts=$current_hosts
+done

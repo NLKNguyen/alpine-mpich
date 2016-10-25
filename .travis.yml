@@ -1,0 +1,19 @@
+sudo: required
+
+language: sh
+
+services:
+  - docker
+
+before_install:
+  - export BASE_IMAGE=nlknguyen/alpine-mpich:latest
+  - export ONBUILD_IMAGE=nlknguyen/alpine-mpich:onbuild
+
+script:
+  - docker build -t $BASE_IMAGE base/
+  - docker build -t $ONBUILD_IMAGE onbuild/
+
+after_success:
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push $BASE_IMAGE
+  - docker push $ONBUILD_IMAGE

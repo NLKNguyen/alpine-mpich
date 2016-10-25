@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Overwrite welcome message for user who logins to one of the worker node
+cat > /etc/motd <<- EOF
+*---------------------------- WORKER NODE ----------------------------------*
+| To run MPI program in the cluster, you need to connect to the master node |
+*---------------------------------------------------------------------------*
+EOF
+
+# Start ssh server in background
+/usr/sbin/sshd -D &
+
+# Keep trying to connect to master node and stay there indefinitely so that master node can look up
+# IP of connected hosts that are ready for MPI work
+while sleep 1
+do
+  ssh -T -o "StrictHostKeyChecking no" -i ${USER_HOME}/.ssh/id_rsa ${USER}@master "tail -f /dev/null"
+done
