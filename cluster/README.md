@@ -15,12 +15,12 @@ This is a quickstart guide of how you can typically use this setup to deploy MPI
 
 1. Clone this repository (or download zip file) 
 ```
-$ git clone https://github.com/NLKNguyen/alpine-mpich-cluster
+$ git clone https://github.com/NLKNguyen/alpine-mpich
 ```
 
 2. Go to `cluster` directory: 
 ```
-$ cd alpine-mpich-cluster/cluster/
+$ cd alpine-mpich/cluster/
 ```
 
 3. Put MPI program source code in `project` directory. There is a sample mpi_hello_world.c program  in the project directory, so let's just use this as an example.
@@ -180,7 +180,3 @@ ex:
 ```
 
 - shutdown everything
-
-
-# License MIT
-Copyright © Nikyle Nguyen
