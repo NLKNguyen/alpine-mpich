@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  registry:
+    image: registry
+    ports:
+      - "${REGISTRY_PORT}:5000"
+
+  master:
+    image: $REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME
+    user: root
+    entrypoint: "mpi_master"
+    ports: 
+      - "${SSH_PORT}:22"
+    networks:
+      - net
+
+  worker:
+    image: $REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME
+    user: root
+    entrypoint: "mpi_worker"
+    networks:
+      - net
+
+networks:
+  net:

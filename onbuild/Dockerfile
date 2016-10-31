@@ -69,11 +69,12 @@ USER ${USER}
 # # ONBUILD (require ssh/ directory in the build context)
 # # ------------------------------------------------------------
 ONBUILD USER root
-ONBUILD COPY ssh/ ${SSHDIR}/
+
+ONBUILD RUN ssh-keygen -f ${SSHDIR}/id_rsa -t rsa -N ''
 
 ONBUILD RUN cat ${SSHDIR}/*.pub >> ${SSHDIR}/authorized_keys
-ONBUILD RUN chmod -R 600 ${SSHDIR}/* \
-         && chown -R ${USER}:${USER} ${SSHDIR}
+
+ONBUILD RUN chown -R ${USER}:${USER} ${SSHDIR}
 
 # Switch back to default user when continue the build process
 ONBUILD USER ${USER}
