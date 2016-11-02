@@ -14,43 +14,39 @@ This is a quickstart guide of how you can typically use this setup to deploy MPI
 0. Open a shell terminal (bash, zsh, etc. but **not** Windows's CMD or Powershell) where Docker Engine and Docker Compose are available
 
 1. Clone this repository (or download zip file) 
-```
-$ git clone https://github.com/NLKNguyen/alpine-mpich
-```
+    ```
+    $ git clone https://github.com/NLKNguyen/alpine-mpich
+    ```
 
 2. Go to `cluster` directory: 
-```
-$ cd alpine-mpich/cluster/
-```
+    ```
+    $ cd alpine-mpich/cluster/
+    ```
 
 3. Put MPI program source code in `project` directory. There is a sample mpi_hello_world.c program  in the project directory, so let's just use this as an example.
 
 4. Modify the `Dockerfile` to build the program inside the image. It already has instructions to build that program, so again, just let's just leave it like that.
 
 5. Use `cluster.sh` script to automate the Docker commands. The actual CLI commands that run will also be shown. List of possible arguments for this script is explained in another section below. For now, just simply spin up the cluster by the following command: 
-
-```
-$ ./cluster.sh up size=5
-```
+    ```
+    $ ./cluster.sh up size=5
+    ```
 
 6. Login to the master node:
-
-```
-$ ./cluster.sh login
-```
+    ```
+    $ ./cluster.sh login
+    ```
 
 7. While in the master node, run the MPI hello world program:
+    ```
+    $ mpirun ./mpi_hello_world
+    ```
+    The host file that contains addresses of connected nodes is automatically updated at `/etc/opt/hosts` where Hydra, the process management system that MPICH uses, will look into by default. Therefore, no need to explicitly provide the host file, but if you want to do it manually:
 
-```
-$ mpirun ./mpi_hello_world
-```
-
-The host file that contains addresses of connected nodes is automatically updated at `/etc/opt/hosts` where Hydra, the process management system that MPICH uses, will look into by default. Therefore, no need to explicitly provide the host file, but if you want to do it manually:
-
-```
-$ get_hosts > hosts
-$ mpirun -f hosts ./mpi_hello_world
-```
+    ```
+    $ get_hosts > hosts
+    $ mpirun -f hosts ./mpi_hello_world
+    ```
 
 # Architecture
 

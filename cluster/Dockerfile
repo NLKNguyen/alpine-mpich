@@ -19,7 +19,7 @@ RUN mpicc -o mpi_hello_world mpi_hello_world.c
 # ####################
 # For Docker beginner:
 
-# After Docker syntax `RUN`, you can excute any command available in 
+# After Docker syntax `RUN`, you can execute any command available in 
 # the current shell of the image.
 
 # To switch to root:    USER root

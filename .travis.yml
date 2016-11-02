@@ -6,14 +6,17 @@ services:
   - docker
 
 before_install:
-  - export BASE_IMAGE=nlknguyen/alpine-mpich:latest
-  - export ONBUILD_IMAGE=nlknguyen/alpine-mpich:onbuild
+  - shopt -s expand_aliases  # allow alias
+  - shopt -s globstar  # allow use of **
+  - export DOCKER_BASE_IMAGE=nlknguyen/alpine-mpich:latest
+  - export DOCKER_ONBUILD_IMAGE=nlknguyen/alpine-mpich:onbuild
 
 script:
-  - docker build -t $BASE_IMAGE base/
-  - docker build -t $ONBUILD_IMAGE onbuild/
+  - sh check_scripts.sh
+  - docker build -t $DOCKER_BASE_IMAGE base/
+  - docker build -t $DOCKER_ONBUILD_IMAGE onbuild/
 
 after_success:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push $BASE_IMAGE
-  - docker push $ONBUILD_IMAGE
+  - docker push $DOCKER_BASE_IMAGE
+  - docker push $DOCKER_ONBUILD_IMAGE

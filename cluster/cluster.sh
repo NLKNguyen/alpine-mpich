@@ -1,19 +1,19 @@
 #!/bin/sh
 
 # The MIT License (MIT)
-# 
+#
 # Copyright (c) 2016 Nikyle Nguyen
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@ COMMAND_SCALE=0
 COMMAND_LOGIN=0
 COMMAND_EXEC=0
 COMMAND_LIST=0
-
+COMMAND_CLEAN=0
 
 # Default values if providing empty
 SIZE=4
@@ -53,7 +53,7 @@ usage ()
     echo " Examples of [COMMAND] can be:"
     echo "      up: start cluster"
     echo "          ./cluster.sh up size=10"
-    echo ""    
+    echo ""
     echo "      scale: resize the cluster"
     echo "          ./cluster.sh scale size=30"
     echo ""
@@ -64,17 +64,20 @@ usage ()
     echo "          ./cluster.sh login"
     echo ""
     echo "      exec: execute shell command at the MPI master node"
-    echo "          ./cluster.sh exec [SHELL COMMAND]"    
-    echo ""     
+    echo "          ./cluster.sh exec [SHELL COMMAND]"
+    echo ""
     echo "      down: shutdown cluster"
     echo "          ./cluster.sh down"
+    # echo ""
+    # echo "      clean: remove images in the system"
+    # echo "          ./cluster.sh clean"
     echo ""
     echo "      list: show running containers of cluster"
     echo "          ./cluster.sh list"
-    echo ""    
+    echo ""
     echo "      help: show this message"
     echo "          ./cluster.sh help"
-    echo ""    
+    echo ""
     echo "  "
 }
 
@@ -110,7 +113,7 @@ generate_ssh_keys ()
     if [ -f ssh/id_rsa ] && [ -f ssh/id_rsa.pub ]; then
         return 0
     fi
-    
+
     printf "\n\n===> GENERATE SSH KEYS \n\n"
 
     echo "$ mkdir -p ssh/ "
@@ -155,7 +158,7 @@ up_workers ()
     printf "\n%s\n" "$HEADER"
     echo "$ docker-compose up -d worker"
     printf "\n"
-    docker-compose up -d worker
+    docker-compose up -d worker 
 
     printf "\n"
     printf "\n%s\n" "$HEADER"
@@ -197,7 +200,7 @@ list ()
 
 exec_on_mpi_master_container ()
 {
-    # shellcheck disable=SC2046    
+    # shellcheck disable=SC2046
     docker exec -it -u mpi $(docker-compose ps | grep 'master'| awk '{print $1}') "$@"
 }
 
@@ -217,7 +220,7 @@ show_instruction ()
     echo '                 \    \         __/               '
     echo '                  \____\_______/                  '
     echo '                                                  '
-    echo '               Alpine MPICH Cluster v1.0          '
+    echo '                 Alpine MPICH Cluster             '
     echo ''
     echo ' More info: https://github.com/NLKNguyen/alpine-mpich-cluster'
     echo ''
@@ -228,10 +231,10 @@ show_instruction ()
     echo "  1. Login to master node:"
     echo "     Using Docker through command wrapper:"
     echo "     $ ./cluster.sh login"
-    echo ""
-    echo "     Or using SSH with keys through exposed port:"
-    echo "     $ ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p $SSH_PORT mpi@localhost"
-    echo '       where [localhost] could be changed to the host IP of master node'
+    # echo ""
+    # echo "     Or using SSH with keys through exposed port:"
+    # echo "     $ ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p $SSH_PORT mpi@localhost"
+    # echo '       where [localhost] could be changed to the host IP of master node'
     echo ""
     echo "  2. Execute MPI programs inside master node, for example:"
     echo "     $ mpirun hostname"
@@ -246,7 +249,7 @@ show_instruction ()
     echo "     $ ./cluster.sh exec [COMMAND]"
     echo ""
     echo "     Example: "
-    echo "     $ ./cluster.sh exec mpirun hostname"    
+    echo "     $ ./cluster.sh exec mpirun hostname"
     echo ""
 }
 
@@ -300,6 +303,10 @@ do
             COMMAND_LIST=1
             ;;
 
+        clean)
+            COMMAND_CLEAN=1
+            ;;
+
         size)
             [ "$VALUE" ] && SIZE=$VALUE
             ;;
@@ -327,6 +334,10 @@ if [ $COMMAND_UP -eq 1 ]; then
 
 elif [ $COMMAND_DOWN -eq 1 ]; then
     down_all
+
+elif [ $COMMAND_CLEAN -eq 1 ]; then
+    echo "TODO"
+
 
 elif [ $COMMAND_SCALE -eq 1 ]; then
     down_master
@@ -358,3 +369,4 @@ elif [ $COMMAND_LIST -eq 1 ]; then
 else
     usage
 fi
+

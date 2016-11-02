@@ -14,5 +14,6 @@ EOF
 # IP of connected hosts that are ready for MPI work
 while sleep 1
 do
-  ssh -T -o "StrictHostKeyChecking no" -i ${USER_HOME}/.ssh/id_rsa ${USER}@master "tail -f /dev/null"
+  # shellcheck disable=SC2086
+  ssh -T -o "StrictHostKeyChecking no" -i "${USER_HOME}/.ssh/id_rsa" ${USER}@master "tail -f /dev/null"
 done

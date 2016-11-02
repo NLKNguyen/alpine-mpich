@@ -23,7 +23,7 @@
 Welcome to Alpine MPICH Cluster!
 
 The default host file is automatically updated at /etc/opt/hosts 
-It contains the list of IP addresses for all nodes in the cluster. 
+It contains the list of addresses for all MPI nodes in the cluster. 
 
 Try this to see all host names in the cluster:
 $ mpirun hostname
