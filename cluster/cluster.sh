@@ -231,10 +231,10 @@ show_instruction ()
     echo "  1. Login to master node:"
     echo "     Using Docker through command wrapper:"
     echo "     $ ./cluster.sh login"
-    # echo ""
-    # echo "     Or using SSH with keys through exposed port:"
-    # echo "     $ ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p $SSH_PORT mpi@localhost"
-    # echo '       where [localhost] could be changed to the host IP of master node'
+    echo ""
+    echo "     Or using SSH with keys through exposed port:"
+    echo "     $ ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p $SSH_PORT mpi@localhost"
+    echo '       where [localhost] could be changed to the host IP of master node'
     echo ""
     echo "  2. Execute MPI programs inside master node, for example:"
     echo "     $ mpirun hostname"
@@ -324,7 +324,7 @@ done
 if [ $COMMAND_UP -eq 1 ]; then
     down_all
     up_registry
-    # generate_ssh_keys
+    generate_ssh_keys
     build_and_push_image
     up_master
     up_workers

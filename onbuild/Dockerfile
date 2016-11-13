@@ -70,11 +70,11 @@ USER ${USER}
 # # ------------------------------------------------------------
 ONBUILD USER root
 
-ONBUILD RUN ssh-keygen -f ${SSHDIR}/id_rsa -t rsa -N ''
+ONBUILD COPY ssh/ ${SSHDIR}/
 
 ONBUILD RUN cat ${SSHDIR}/*.pub >> ${SSHDIR}/authorized_keys
-
-ONBUILD RUN chown -R ${USER}:${USER} ${SSHDIR}
+ONBUILD RUN chmod -R 600 ${SSHDIR}/* \
+         && chown -R ${USER}:${USER} ${SSHDIR}
 
 # Switch back to default user when continue the build process
 ONBUILD USER ${USER}

@@ -11,7 +11,7 @@ Original software targets:
 
 This is a quickstart guide of how you can typically use this setup to deploy MPI programs in a cluster of connected Docker containers. For further details, see the next sections.
 
-0. Open a shell terminal (bash, zsh, etc. but **not** Windows's CMD or Powershell) where Docker Engine and Docker Compose are available
+0. Open a shell terminal where Docker Engine and Docker Compose are available (bash, zsh, etc. but **NOT** Windows's CMD or Powershell because the runner script has not been ported to those environment).
 
 1. Clone this repository (or download zip file) 
     ```
@@ -25,7 +25,7 @@ This is a quickstart guide of how you can typically use this setup to deploy MPI
 
 3. Put MPI program source code in `project` directory. There is a sample mpi_hello_world.c program  in the project directory, so let's just use this as an example.
 
-4. Modify the `Dockerfile` to build the program inside the image. It already has instructions to build that program, so again, just let's just leave it like that.
+4. Modify the `Dockerfile` to build the program inside the image. It already has instructions to build that program, so again, let's just leave it like that.
 
 5. Use `cluster.sh` script to automate the Docker commands. The actual CLI commands that run will also be shown. List of possible arguments for this script is explained in another section below. For now, just simply spin up the cluster by the following command: 
     ```

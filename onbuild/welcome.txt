@@ -22,16 +22,14 @@
 
 Welcome to Alpine MPICH Cluster!
 
-The default host file is automatically updated at /etc/opt/hosts 
-It contains the list of addresses for all MPI nodes in the cluster. 
-
 Try this to see all host names in the cluster:
 $ mpirun hostname
 
-You don't need to provide host file to MPI, but if you want to, this
-is how you can obtain the host file and provide to MPI manually:
+You don't need to provide host file to MPI because the default host file
+of connected nodes in the cluster is automatically updated at /etc/opt/hosts
+
+To obtain hostfile manually and provide to MPI by yourself:
 $ get_hosts > hosts
 $ mpirun -f hosts hostname
 
-For more information: https://github.com/NLKNguyen/alpine-mpich-cluster
-
+For more information: https://github.com/NLKNguyen/alpine-mpich/cluster
