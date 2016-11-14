@@ -8,11 +8,8 @@ RUN apk add --no-cache openssh
 # # Utility shell scripts
 # # ------------------------------------------------------------
 
-COPY mpi_master /usr/local/bin/mpi_master
-RUN chmod +x /usr/local/bin/mpi_master
-
-COPY mpi_worker /usr/local/bin/mpi_worker
-RUN chmod +x /usr/local/bin/mpi_worker
+COPY mpi_bootstrap /usr/local/bin/mpi_bootstrap
+RUN chmod +x /usr/local/bin/mpi_bootstrap
 
 COPY get_hosts /usr/local/bin/get_hosts
 RUN chmod +x /usr/local/bin/get_hosts

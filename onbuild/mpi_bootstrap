@@ -1,0 +1,65 @@
+#!/bin/sh
+
+ROLE="undefined"
+MPI_MASTER_SERVICE_NAME="mpi_master"
+MPI_WORKER_SERVICE_NAME="mpi_worker"
+
+#######################
+# ARGUMENTS PARSER
+
+while [ "$1" != "" ]; 
+do
+    PARAM=$(echo "$1" | awk -F= '{print $1}')
+    VALUE=$(echo "$1" | awk -F= '{print $2}')
+
+    case $PARAM in
+        role)
+            [ "$VALUE" ] && ROLE=$VALUE
+            ;;
+
+        mpi_master_service_name)
+            [ "$VALUE" ] && MPI_MASTER_SERVICE_NAME=$VALUE
+            ;;
+
+        mpi_worker_service_name)
+            [ "$VALUE" ] && MPI_WORKER_SERVICE_NAME=$VALUE
+            ;;
+        *)
+            echo "ERROR: unknown parameter \"$PARAM\""
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+
+
+cat > /etc/opt/service_names <<- EOF
+MPI_MASTER_SERVICE_NAME=${MPI_MASTER_SERVICE_NAME}
+MPI_WORKER_SERVICE_NAME=${MPI_WORKER_SERVICE_NAME}
+EOF
+
+case $ROLE in
+    "master")
+        # mpi_master
+        # Auto update default host file in background and dumb all output
+        auto_update_hosts "${HYDRA_HOST_FILE}" > /dev/null 2>&1 &
+
+        # Start ssh server
+        /usr/sbin/sshd -D
+        ;;
+    "worker")
+        # mpi_worker
+        # Start ssh server in background
+        /usr/sbin/sshd -D &
+        # Keep trying to connect to master node and stay there indefinitely so that master node can look up
+        # IP of connected hosts that are ready for MPI work
+        while sleep 1
+        do
+            # shellcheck disable=SC2086
+            ssh -T -o "StrictHostKeyChecking no" -i "${USER_HOME}/.ssh/id_rsa" ${USER}@${MPI_MASTER_SERVICE_NAME} "tail -f /dev/null"
+        done        
+        ;;
+    *)
+        echo 'role argument only accepts "master" or "worker"'
+esac

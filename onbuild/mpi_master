@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Auto update default host file in background and dumb all output
-auto_update_hosts "${HYDRA_HOST_FILE}" > /dev/null 2>&1 &
-
-# Start ssh server
-/usr/sbin/sshd -D

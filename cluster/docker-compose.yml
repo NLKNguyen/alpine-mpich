@@ -9,16 +9,16 @@ services:
   master:
     image: $REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME
     user: root
-    entrypoint: "mpi_master"
-    ports: 
-      - "${SSH_PORT}:22"    
+    entrypoint: ["mpi_bootstrap", "role=master", "mpi_master_service_name=master", "mpi_worker_service_name=worker"]
+    ports:
+      - "${SSH_PORT}:22"
     networks:
       - net
 
   worker:
     image: $REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME
     user: root
-    entrypoint: "mpi_worker"
+    entrypoint: ["mpi_bootstrap", "role=worker", "mpi_master_service_name=master", "mpi_worker_service_name=worker"]
     networks:
       - net
 

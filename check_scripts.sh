@@ -10,7 +10,6 @@ shellcheck --version
 shellcheck  **/*.sh                     \
             onbuild/auto_update_hosts   \
             onbuild/get_hosts           \
-            onbuild/mpi_master          \
-            onbuild/mpi_worker
+            onbuild/mpi_bootstrap       \
 
 echo "=> No styling trouble found"
