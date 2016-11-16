@@ -56,9 +56,11 @@ COMMAND_CONFIG=0
 
 OPTION_SHOW=0
 OPTION_SET=0
-OPTION_DELAY=0
+OPTION_DELAY=1
 OPTION_SSH_KEYGEN=0
 OPTION_WATCH=0
+
+SHELL_COMMAND=""
 #############################################
 usage ()
 {
@@ -179,7 +181,7 @@ up_master ()
         --network ${NETWORK_NAME}              \
         --publish ${SSH_PORT}:22               \
         --user root                            \
-        ${IMAGE_TAG} mpi_bootstrap             \
+        "${IMAGE_TAG}" mpi_bootstrap             \
                     mpi_master_service_name=${MPI_MASTER_SERVICE_NAME} \
                     mpi_worker_service_name=${MPI_WORKER_SERVICE_NAME} \
                     role=master
@@ -214,7 +216,7 @@ up_workers ()
         --replicas ${NUM_WORKER}               \
         --network ${NETWORK_NAME}              \
         --user root                            \
-        ${IMAGE_TAG} mpi_bootstrap             \
+        "${IMAGE_TAG}" mpi_bootstrap             \
                     mpi_master_service_name=${MPI_MASTER_SERVICE_NAME} \
                     mpi_worker_service_name=${MPI_WORKER_SERVICE_NAME} \
                     role=worker
@@ -369,6 +371,7 @@ show_instruction ()
     echo '                  \____\_______/                  '
     echo '                                                  '
     echo '                 Alpine MPICH Cluster             '
+    echo '                      Swarm Mode                  '
     echo ''
     echo ' More info: https://github.com/NLKNguyen/alpine-mpich'
     echo ''
@@ -381,7 +384,6 @@ show_instruction ()
     echo ""
     echo "     which is equivalent to:"
     echo "     $ ssh -o \"StrictHostKeyChecking no\" -i ssh/id_rsa -p $SSH_PORT mpi@$SSH_ADDR"
-    echo '       where [localhost] could be changed to the host IP of master node'
     echo ""
     echo "  2. Execute MPI programs inside master node, for example:"
     echo "     $ mpirun hostname"
@@ -415,17 +417,19 @@ do
             exit
             ;;
 
-        ### command config ###
+        -i)
+            show_instruction
+            exit
+            ;;
+
         config)
             COMMAND_CONFIG=1
             ;;
 
-            ### option
             show)
                 OPTION_SHOW=1
                 ;;
 
-            ### option
             set)
                 OPTION_SET=1
                 ;;
@@ -476,11 +480,19 @@ do
             COMMAND_LIST=1
             ;;
 
+        exec)
+            COMMAND_EXEC=1
+            shift # the rest is the shell command to run in the node
+            SHELL_COMMAND="$*"
+            break # end while loop
+            ;;
+
+        ### options
         size)
             [ "$VALUE" ] && SIZE=$VALUE
             ;;
 
-        ### options
+        
         --delay)
             [ "$VALUE" ] && OPTION_DELAY=$VALUE
             ;;
@@ -559,10 +571,13 @@ elif [ $COMMAND_RELOAD -eq 1 ]; then
     show_instruction
 
 elif [ $COMMAND_LOGIN -eq 1 ]; then
+    # shellcheck disable=SC2086
     ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p ${SSH_PORT} mpi@${SSH_ADDR}
 
 elif [ $COMMAND_EXEC -eq 1 ]; then
-    ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p ${SSH_PORT} mpi@${SSH_ADDR} "${SHELL_COMMAND}"
+    # shellcheck disable=SC2029 disable=SC2086
+    ssh -o "StrictHostKeyChecking no" -i ssh/id_rsa -p ${SSH_PORT} mpi@${SSH_ADDR} \
+    ". /etc/profile; . ~/.profile; $SHELL_COMMAND"
 
 elif [ $COMMAND_LIST -eq 1 ]; then
     list
