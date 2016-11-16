@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Origin: https://github.com/NLKNguyen/alpine-mpich-cluster
+# Origin: https://github.com/NLKNguyen/alpine-mpich
 
 set -e
 
@@ -46,7 +46,7 @@ SIZE=4
 #############################################
 usage ()
 {
-    echo " Alpine MPICH Cluster"
+    echo " Alpine MPICH Cluster (for Docker Compose on single Docker host)"
     echo ""
     echo " USAGE: ./cluster.sh [COMMAND] [OPTIONS]"
     echo ""
@@ -84,7 +84,7 @@ usage ()
 HEADER="
          __v_
         (.___\/{
-~^~^~^~^~^~^~^~^~^~^~^~^~\n"
+~^~^~^~^~^~^~^~^~^~^~^~^~"
 
 down_all ()
 {
@@ -222,7 +222,7 @@ show_instruction ()
     echo '                                                  '
     echo '                 Alpine MPICH Cluster             '
     echo ''
-    echo ' More info: https://github.com/NLKNguyen/alpine-mpich-cluster'
+    echo ' More info: https://github.com/NLKNguyen/alpine-mpich'
     echo ''
     echo '=============================================================='
     echo ''
