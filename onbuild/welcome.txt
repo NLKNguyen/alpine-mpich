@@ -32,4 +32,4 @@ To obtain hostfile manually and provide to MPI by yourself:
 $ get_hosts > hosts
 $ mpirun -f hosts hostname
 
-For more information: https://github.com/NLKNguyen/alpine-mpich/cluster
+For more information: https://github.com/NLKNguyen/alpine-mpich/

@@ -6,6 +6,8 @@ Designed for MPI program development and deployment.
 For usage instruction, see the Docker Hub page of this image: 
 [https://hub.docker.com/r/nlknguyen/alpine-mpich](https://hub.docker.com/r/nlknguyen/alpine-mpich/)
 
+For distributed MPI cluster setup, see instruction: [https://github.com/NLKNguyen/alpine-mpich/tree/master/cluster](https://github.com/NLKNguyen/alpine-mpich/tree/master/cluster)  
+
 ----
 Automated build with Travis CI and push to Docker Hub
 

@@ -561,14 +561,15 @@ elif [ $COMMAND_SCALE -eq 1 ]; then
     fi
 
 elif [ $COMMAND_RELOAD -eq 1 ]; then
-    down_master
-    down_workers
-    build_and_push_image
-    up_master
-    up_workers
+    echo "Feature is not available yet."
+    # down_master
+    # down_workers
+    # build_and_push_image
+    # up_master
+    # up_workers
 
-    prompt_ready
-    show_instruction
+    # prompt_ready
+    # show_instruction
 
 elif [ $COMMAND_LOGIN -eq 1 ]; then
     # shellcheck disable=SC2086
