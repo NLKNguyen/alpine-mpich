@@ -472,6 +472,10 @@ do
             COMMAND_SCALE=1
             ;;
 
+        reload)
+            COMMAND_RELOAD=1
+            ;;
+
         login)
             COMMAND_LOGIN=1
             ;;
@@ -517,11 +521,17 @@ set_variables
 
 watch_replicas_resizing ()
 {
-    watch -n 0.1 "docker service ls | awk '{ print \$2, \$3 }' | column -t && printf '\nPress Ctrl + C to stop watching'"
+    while sleep 0.5
+    do
+      clear; docker service ls | awk '{ print $2, $3 }' | column -t && printf '\nPress Ctrl + C to stop watching'
+    done
+    # watch -n 0.1 "docker service ls | awk '{ print \$2, \$3 }' | column -t && printf '\nPress Ctrl + C to stop watching'"
+    # ^ Some systems don't come with `watch` program
 }
 
 if [ $COMMAND_UP -eq 1 ]; then
     down_all
+
     if [ $OPTION_SSH_KEYGEN -eq 1 ]; then
         generate_ssh_keys
     fi
@@ -561,15 +571,21 @@ elif [ $COMMAND_SCALE -eq 1 ]; then
     fi
 
 elif [ $COMMAND_RELOAD -eq 1 ]; then
-    echo "Feature is not available yet."
-    # down_master
-    # down_workers
-    # build_and_push_image
-    # up_master
-    # up_workers
+    down_services
 
-    # prompt_ready
-    # show_instruction
+    if [ $OPTION_SSH_KEYGEN -eq 1 ]; then
+        generate_ssh_keys
+    fi
+    build_and_push_image
+    up_master
+    up_workers
+
+    if [ $OPTION_WATCH -eq 1 ]; then
+        watch_replicas_resizing
+    fi
+
+    prompt_ready
+    show_instruction
 
 elif [ $COMMAND_LOGIN -eq 1 ]; then
     # shellcheck disable=SC2086
