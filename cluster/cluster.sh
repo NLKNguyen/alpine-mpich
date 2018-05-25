@@ -185,7 +185,7 @@ down_workers ()
     printf "\n%s\n" "$HEADER"
     echo "$ docker-compose stop worker && docker-compose rm -f worker"
     printf "\n"
-    docker-compose stop master && docker-compose rm -f master
+    docker-compose stop worker && docker-compose rm -f worker
 }
 
 list ()
