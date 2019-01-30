@@ -201,7 +201,7 @@ list ()
 exec_on_mpi_master_container ()
 {
     # shellcheck disable=SC2046
-    docker exec -it -u mpi $(docker-compose ps | grep 'master'| awk '{print $1}') "$@"
+    docker exec -it -u mpi $(docker-compose ps | grep 'master'| awk 'NR==1{print $1}') "$@"
 }
 
 prompt_ready ()
@@ -359,7 +359,7 @@ elif [ $COMMAND_RELOAD -eq 1 ]; then
     show_instruction
 
 elif [ $COMMAND_LOGIN -eq 1 ]; then
-    exec_on_mpi_master_container ash
+    exec_on_mpi_master_container /bin/sh
 
 elif [ $COMMAND_EXEC -eq 1 ]; then
     exec_on_mpi_master_container ash -c "${SHELL_COMMAND}"
