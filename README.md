@@ -26,6 +26,8 @@ Distributed MPI cluster setup instruction: [https://github.com/NLKNguyen/alpine-
 
 Automated build with Travis CI and push to Docker Hub [https://hub.docker.com/r/nlknguyen/alpine-mpich](https://hub.docker.com/r/nlknguyen/alpine-mpich/)
 
+**TODO Feb 23, 2019**: Current failed checks are due to new style rules for shell scripts using *shellcheck* tool. All shell scripts need to be updated to pass the build. Most of shellcheck's recommendations are legit. 
+
 [![Build Status](https://travis-ci.org/NLKNguyen/alpine-mpich.svg?branch=master)](https://travis-ci.org/NLKNguyen/alpine-mpich)
 
 [![Docker Hub](http://dockeri.co/image/nlknguyen/alpine-mpich)](https://hub.docker.com/r/nlknguyen/alpine-mpich)
