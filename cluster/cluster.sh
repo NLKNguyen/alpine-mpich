@@ -83,27 +83,27 @@ usage ()
 
 HEADER="
          __v_
-        (.___\/{
+        (.___\\/{
 ~^~^~^~^~^~^~^~^~^~^~^~^~"
 
 down_all ()
 {
-    printf "\n\n===> CLEAN UP CLUSTER"
+    printf "\\n\\n===> CLEAN UP CLUSTER"
 
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose down"
-    printf "\n"
+    printf "\\n"
 
     docker-compose down
 }
 
 up_registry ()
 {
-    printf "\n\n===> SPIN UP REGISTRY"
+    printf "\\n\\n===> SPIN UP REGISTRY"
 
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose up -d registry"
-    printf "\n"
+    printf "\\n"
 
     docker-compose up -d registry
 }
@@ -114,86 +114,86 @@ generate_ssh_keys ()
         return 0
     fi
 
-    printf "\n\n===> GENERATE SSH KEYS \n\n"
+    printf "\\n\\n===> GENERATE SSH KEYS \\n\\n"
 
     echo "$ mkdir -p ssh/ "
-    printf "\n"
+    printf "\\n"
     mkdir -p ssh/
 
     echo "$ ssh-keygen -f ssh/id_rsa -t rsa -N ''"
-    printf "\n"
+    printf "\\n"
     ssh-keygen -f ssh/id_rsa -t rsa -N ''
 }
 
 build_and_push_image ()
 {
-    printf "\n\n===> BUILD IMAGE"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> BUILD IMAGE"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker build -t \"$REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME\" ."
-    printf "\n"
+    printf "\\n"
     docker build -t "$REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME" .
 
-    printf "\n"
+    printf "\\n"
 
-    printf "\n\n===> PUSH IMAGE TO REGISTRY"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> PUSH IMAGE TO REGISTRY"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker push \"$REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME\""
-    printf "\n"
+    printf "\\n"
     docker push "$REGISTRY_ADDR:$REGISTRY_PORT/$IMAGE_NAME"
 }
 
 up_master ()
 {
-    printf "\n\n===> SPIN UP MASTER NODE"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> SPIN UP MASTER NODE"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose up -d master"
-    printf "\n"
+    printf "\\n"
     docker-compose up -d master
 }
 
 
 up_workers ()
 {
-    printf "\n\n===> SPIN UP WORKER NODES"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> SPIN UP WORKER NODES"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose up -d worker"
-    printf "\n"
+    printf "\\n"
     docker-compose up -d worker 
 
-    printf "\n"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n"
+    printf "\\n%s\\n" "$HEADER"
 
     NUM_WORKER=$((SIZE - 1))
     echo "$ docker-compose scale worker=$NUM_WORKER"
-    printf "\n"
+    printf "\\n"
     docker-compose scale worker=${NUM_WORKER}
 }
 
 down_master ()
 {
-    printf "\n\n===> TORN DOWN MASTER NODE"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> TORN DOWN MASTER NODE"
+    printf "\\n%s\\n" "$HEADER"
 
     echo "$ docker-compose stop master && docker-compose rm -f master"
-    printf "\n"
+    printf "\\n"
     docker-compose stop master && docker-compose rm -f master
 }
 
 down_workers ()
 {
-    printf "\n\n===> TORN DOWN WORKER NODES"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> TORN DOWN WORKER NODES"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose stop worker && docker-compose rm -f worker"
-    printf "\n"
+    printf "\\n"
     docker-compose stop worker && docker-compose rm -f worker
 }
 
 list ()
 {
-    printf "\n\n===> LIST CONTAINERS"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> LIST CONTAINERS"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose ps"
-    printf "\n"
+    printf "\\n"
     docker-compose ps
 }
 
@@ -206,7 +206,7 @@ exec_on_mpi_master_container ()
 
 prompt_ready ()
 {
-    printf "\n\n===> CLUSTER READY \n\n"
+    printf "\\n\\n===> CLUSTER READY \\n\\n"
 }
 
 show_instruction ()
