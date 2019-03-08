@@ -2,7 +2,8 @@ FROM nlknguyen/alpine-mpich:latest
 
 USER root
 
-RUN apk add --no-cache openssh 
+# bind-tools gives us 'dig'
+RUN apk add --no-cache openssh bind-tools
 
 # # ------------------------------------------------------------
 # # Utility shell scripts
