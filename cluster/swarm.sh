@@ -101,7 +101,7 @@ usage ()
 
 HEADER="
          __v_
-        (.___\/{
+        (.___\\/{
 ~^~^~^~^~^~^~^~^~^~^~^~^~"
 
 set_variables ()
@@ -120,13 +120,13 @@ delay ()
 
 up_network ()
 {
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     printf "$ docker network create  \\
                 --driver overlay      \\
                 --subnet %s  \\
                 --opt encrypted       \\
-                %s\n" "${NETWORK_SUBNET}" "${NETWORK_NAME}"
-    printf "\n"
+                %s\\n" "${NETWORK_SUBNET}" "${NETWORK_NAME}"
+    printf "\\n"
 
     docker network create               \
             --driver overlay            \
@@ -141,11 +141,11 @@ up_network ()
 
 down_network ()
 {
-    printf "\n\n===> REMOVE NETWORK"
+    printf "\\n\\n===> REMOVE NETWORK"
 
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker network rm ${NETWORK_NAME}"
-    printf "\n"
+    printf "\\n"
     if docker network rm ${NETWORK_NAME} ; then
         echo "=> network is removed"
     else
@@ -157,9 +157,9 @@ down_network ()
 
 up_master ()
 {
-    printf "\n\n===> SPIN UP MASTER SERVICE"
+    printf "\\n\\n===> SPIN UP MASTER SERVICE"
 
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     printf "$ docker service create \\
         --name %s \\
         --replicas 1 \\
@@ -169,11 +169,11 @@ up_master ()
         %s mpi_bootstrap \\
             mpi_master_service_name=%s \\
             mpi_worker_service_name=%s \\
-            role=master\n" \
+            role=master\\n" \
     "${MPI_MASTER_SERVICE_NAME}" "${NETWORK_NAME}" "${SSH_PORT}" "${IMAGE_TAG}" \
     "${MPI_MASTER_SERVICE_NAME}" "${MPI_WORKER_SERVICE_NAME}"
 
-    printf "\n"
+    printf "\\n"
 
     docker service create                      \
         --name ${MPI_MASTER_SERVICE_NAME}      \
@@ -193,10 +193,10 @@ up_master ()
 
 up_workers ()
 {
-    printf "\n\n===> SPIN UP WORKER SERVICE"
+    printf "\\n\\n===> SPIN UP WORKER SERVICE"
     NUM_WORKER=$((SIZE - 1))
 
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     printf "$ docker service create \\
         --name %s \\
         --replicas %s \\
@@ -205,11 +205,11 @@ up_workers ()
         %s mpi_bootstrap \\
             mpi_master_service_name=%s \\
             mpi_worker_service_name=%s \\
-            role=worker\n" \
+            role=worker\\n" \
     "${MPI_WORKER_SERVICE_NAME}" "${NUM_WORKER}" "${NETWORK_NAME}" "${IMAGE_TAG}" \
     "${MPI_MASTER_SERVICE_NAME}" "${MPI_WORKER_SERVICE_NAME}"
 
-    printf "\n"
+    printf "\\n"
 
     docker service create                      \
         --name ${MPI_WORKER_SERVICE_NAME}      \
@@ -228,14 +228,14 @@ up_workers ()
 
 scale_workers ()
 {
-    printf "\n\n===> SCALE SERVICES"
+    printf "\\n\\n===> SCALE SERVICES"
     NUM_WORKER=$((SIZE - 1))
 
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     printf "$ docker service scale %s=%s" \
         "${MPI_WORKER_SERVICE_NAME}" "${NUM_WORKER}"
 
-    printf "\n"
+    printf "\\n"
 
     docker service scale ${MPI_WORKER_SERVICE_NAME}=${NUM_WORKER}
 
@@ -246,9 +246,9 @@ scale_workers ()
 
 down_services ()
 {
-    printf "\n%s\n" "$HEADER"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker service rm ${MPI_MASTER_SERVICE_NAME} ${MPI_WORKER_SERVICE_NAME}"
-    printf "\n"
+    printf "\\n"
     if ! docker service rm ${MPI_MASTER_SERVICE_NAME} ${MPI_WORKER_SERVICE_NAME} ; then
         echo "=> No problem"
     fi
@@ -260,7 +260,7 @@ down_services ()
 
 down_all ()
 {
-    printf "\n\n===> CLEAN UP CLUSTER"
+    printf "\\n\\n===> CLEAN UP CLUSTER"
     down_services
     down_network
 }
@@ -273,54 +273,54 @@ generate_ssh_keys ()
     #     return 0
     # fi
 
-    printf "\n\n===> GENERATE SSH KEYS \n\n"
+    printf "\\n\\n===> GENERATE SSH KEYS \\n\\n"
     echo "$ rm -f ssh/id_rsa ssh/id_rsa.pub"
-    printf "\n"
+    printf "\\n"
     rm -f ssh/id_rsa ssh/id_rsa.pub
 
     echo "$ mkdir -p ssh/ "
-    printf "\n"
+    printf "\\n"
     mkdir -p ssh/
 
     echo "$ ssh-keygen -f ssh/id_rsa -t rsa -N ''"
-    printf "\n"
+    printf "\\n"
     ssh-keygen -f ssh/id_rsa -t rsa -N ''
 }
 
 build_and_push_image ()
 {
-    printf "\n\n===> BUILD IMAGE"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> BUILD IMAGE"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker build -t \"$IMAGE_TAG\" ."
-    printf "\n"
+    printf "\\n"
     docker build -t "$IMAGE_TAG" .
 
-    printf "\n"
+    printf "\\n"
 
-    printf "\n\n===> PUSH IMAGE TO REGISTRY"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> PUSH IMAGE TO REGISTRY"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker push \"$IMAGE_TAG\""
-    printf "\n"
+    printf "\\n"
     docker push "$IMAGE_TAG"
 }
 
 
 down_master ()
 {
-    printf "\n\n===> TORN DOWN MASTER NODE"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> TORN DOWN MASTER NODE"
+    printf "\\n%s\\n" "$HEADER"
 
     echo "$ docker-compose stop master && docker-compose rm -f master"
-    printf "\n"
+    printf "\\n"
     docker-compose stop master && docker-compose rm -f master
 }
 
 down_workers ()
 {
-    printf "\n\n===> TORN DOWN WORKER NODES"
-    printf "\n%s\n" "$HEADER"
+    printf "\\n\\n===> TORN DOWN WORKER NODES"
+    printf "\\n%s\\n" "$HEADER"
     echo "$ docker-compose stop worker && docker-compose rm -f worker"
-    printf "\n"
+    printf "\\n"
     docker-compose stop master && docker-compose rm -f master
 }
 
@@ -355,7 +355,7 @@ show_config ()
 
 prompt_ready ()
 {
-    printf "\n\n===> CLUSTER READY \n\n"
+    printf "\\n\\n===> CLUSTER READY \\n\\n"
 }
 
 
