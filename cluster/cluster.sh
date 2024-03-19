@@ -164,9 +164,9 @@ up_workers ()
     printf "\\n%s\\n" "$HEADER"
 
     NUM_WORKER=$((SIZE - 1))
-    echo "$ docker-compose scale worker=$NUM_WORKER"
+    echo "$ docker-compose up --scale worker=$NUM_WORKER"
     printf "\\n"
-    docker-compose scale worker=${NUM_WORKER}
+    docker-compose up --scale worker=${NUM_WORKER}
 }
 
 down_master ()
