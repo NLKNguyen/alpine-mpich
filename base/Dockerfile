@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.19
 # In case the main package repositories are down, use the alternative base image:
 # FROM gliderlabs/alpine:3.4
 # Updated by nbp - adding ca-certs etc.
@@ -8,7 +8,11 @@ MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 ARG REQUIRE="sudo build-base"
 RUN apk update && apk upgrade \
       && apk add --no-cache ${REQUIRE}
-RUN apk update && apk add ca-certificates && update-ca-certificates && apk add openssl
+RUN apk update\
+      && apk add ca-certificates wget && update-ca-certificates \
+      && apk add openssl \
+      && apk add perl \
+      && apk add python3 \
 
 #### INSTALL MPICH ####
 # Source is available at http://www.mpich.org/static/downloads/
