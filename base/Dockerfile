@@ -14,7 +14,8 @@ RUN apk update\
       && apk add perl \
       && apk add python3 \
       && apk add linux-headers \
-      && apk add nano 
+      && apk add nano \
+      && apk add bash 
 
 #### INSTALL MPICH ####
 # Source is available at http://www.mpich.org/static/downloads/
@@ -23,7 +24,7 @@ RUN apk update\
 # See installation guide of target MPICH version
 # Ex: http://www.mpich.org/static/downloads/3.2/mpich-3.2-installguide.pdf
 # These options are passed to the steps below
-ARG MPICH_VERSION="3.3"
+ARG MPICH_VERSION="3.4"
 ARG MPICH_CONFIGURE_OPTIONS="--disable-fortran --with-device=ch3 --disable-f77 --disable-fc"
 ARG MPICH_MAKE_OPTIONS
 
@@ -42,7 +43,7 @@ RUN wget http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VE
 RUN mkdir /tmp/mpich-test
 WORKDIR /tmp/mpich-test
 COPY mpich-test .
-RUN sh test.sh
+RUN bash test.sh
 RUN rm -rf /tmp/mpich-test
 
 
