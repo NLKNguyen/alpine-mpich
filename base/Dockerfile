@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM alpine:3.19
 # In case the main package repositories are down, use the alternative base image:
 # FROM gliderlabs/alpine:3.4
 # Updated by nbp - adding ca-certs etc.
@@ -8,7 +8,14 @@ MAINTAINER Nikyle Nguyen <NLKNguyen@MSN.com>
 ARG REQUIRE="sudo build-base"
 RUN apk update && apk upgrade \
       && apk add --no-cache ${REQUIRE}
-RUN apk update && apk add ca-certificates && update-ca-certificates && apk add openssl
+RUN apk update\
+      && apk add ca-certificates wget && update-ca-certificates \
+      && apk add openssl \
+      && apk add perl \
+      && apk add python3 \
+      && apk add linux-headers \
+      && apk add nano \
+      && apk add bash 
 
 #### INSTALL MPICH ####
 # Source is available at http://www.mpich.org/static/downloads/
@@ -17,8 +24,8 @@ RUN apk update && apk add ca-certificates && update-ca-certificates && apk add o
 # See installation guide of target MPICH version
 # Ex: http://www.mpich.org/static/downloads/3.2/mpich-3.2-installguide.pdf
 # These options are passed to the steps below
-ARG MPICH_VERSION="3.2"
-ARG MPICH_CONFIGURE_OPTIONS="--disable-fortran"
+ARG MPICH_VERSION="3.4"
+ARG MPICH_CONFIGURE_OPTIONS="--disable-fortran --with-device=ch3 --disable-f77 --disable-fc"
 ARG MPICH_MAKE_OPTIONS
 
 # Download, build, and install MPICH
@@ -36,7 +43,7 @@ RUN wget http://www.mpich.org/static/downloads/${MPICH_VERSION}/mpich-${MPICH_VE
 RUN mkdir /tmp/mpich-test
 WORKDIR /tmp/mpich-test
 COPY mpich-test .
-RUN sh test.sh
+RUN bash test.sh
 RUN rm -rf /tmp/mpich-test
 
 
