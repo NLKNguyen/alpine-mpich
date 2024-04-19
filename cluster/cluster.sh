@@ -91,10 +91,10 @@ down_all ()
     printf "\\n\\n===> CLEAN UP CLUSTER"
 
     printf "\\n%s\\n" "$HEADER"
-    echo "$ docker-compose down"
+    echo "$ docker compose down"
     printf "\\n"
 
-    docker-compose down
+    docker compose down
 }
 
 up_registry ()
@@ -102,10 +102,10 @@ up_registry ()
     printf "\\n\\n===> SPIN UP REGISTRY"
 
     printf "\\n%s\\n" "$HEADER"
-    echo "$ docker-compose up -d registry"
+    echo "$ docker compose up -d registry"
     printf "\\n"
 
-    docker-compose up -d registry
+    docker compose up -d registry
 }
 
 generate_ssh_keys ()
@@ -146,9 +146,9 @@ up_master ()
 {
     printf "\\n\\n===> SPIN UP MASTER NODE"
     printf "\\n%s\\n" "$HEADER"
-    echo "$ docker-compose up -d master"
+    echo "$ docker compose up -d master"
     printf "\\n"
-    docker-compose up -d master
+    docker compose up -d master
 }
 
 
@@ -156,17 +156,17 @@ up_workers ()
 {
     printf "\\n\\n===> SPIN UP WORKER NODES"
     printf "\\n%s\\n" "$HEADER"
-    echo "$ docker-compose up -d worker"
+    echo "$ docker compose up -d worker"
     printf "\\n"
-    docker-compose up -d worker 
+    docker compose up -d worker 
 
     printf "\\n"
     printf "\\n%s\\n" "$HEADER"
 
     NUM_WORKER=$((SIZE - 1))
-    echo "$ docker-compose up --scale worker=$NUM_WORKER"
+    echo "$ docker compose up --scale worker=$NUM_WORKER"
     printf "\\n"
-    docker-compose up --scale worker=${NUM_WORKER}
+    docker compose up --scale worker=${NUM_WORKER}
 }
 
 down_master ()
@@ -174,34 +174,34 @@ down_master ()
     printf "\\n\\n===> TORN DOWN MASTER NODE"
     printf "\\n%s\\n" "$HEADER"
 
-    echo "$ docker-compose stop master && docker-compose rm -f master"
+    echo "$ docker compose stop master && docker compose rm -f master"
     printf "\\n"
-    docker-compose stop master && docker-compose rm -f master
+    docker compose stop master && docker compose rm -f master
 }
 
 down_workers ()
 {
     printf "\\n\\n===> TORN DOWN WORKER NODES"
     printf "\\n%s\\n" "$HEADER"
-    echo "$ docker-compose stop worker && docker-compose rm -f worker"
+    echo "$ docker compose stop worker && docker compose rm -f worker"
     printf "\\n"
-    docker-compose stop worker && docker-compose rm -f worker
+    docker compose stop worker && docker compose rm -f worker
 }
 
 list ()
 {
     printf "\\n\\n===> LIST CONTAINERS"
     printf "\\n%s\\n" "$HEADER"
-    echo "$ docker-compose ps"
+    echo "$ docker compose ps"
     printf "\\n"
-    docker-compose ps
+    docker compose ps
 }
 
 
 exec_on_mpi_master_container ()
 {
     # shellcheck disable=SC2046
-    docker exec -it -u mpi $(docker-compose ps | grep 'master'| awk 'NR==1{print $1}') "$@"
+    docker exec -it -u mpi $(docker compose ps | grep 'master'| awk 'NR==1{print $1}') "$@"
 }
 
 prompt_ready ()
